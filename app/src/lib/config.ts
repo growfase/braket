@@ -20,6 +20,10 @@ export const TREASURY_ADDRESS = "REPLACE_WITH_TREASURY_PUBKEY";
 /** Network used for the wallet connection. */
 export const SOLANA_CLUSTER: "devnet" | "mainnet-beta" = "devnet";
 
+/** RPC endpoint used to build the on-chain deposit transfer (devnet by default). */
+export const SOLANA_RPC_URL =
+  (import.meta.env.VITE_SOLANA_RPC_URL as string | undefined) ?? "https://api.devnet.solana.com";
+
 export const TOURNAMENT_NAME = "World Cup";
 
 /** Date of the final / prediction deadline — shown in the footer "Final" stat. */

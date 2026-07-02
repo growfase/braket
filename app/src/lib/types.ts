@@ -46,6 +46,9 @@ export interface Prediction {
   picks?: BracketPicks;
   stakeSol: number;
   createdAt: number;
+  /** Server-generated deposit address for this prediction (payment target). */
+  depositAddress?: string;
+  paymentStatus?: "awaiting" | "paid" | "expired";
   status: PredictionStatus;
   /** How many picks matched official results (0 until results exist). */
   correctPicks: number;

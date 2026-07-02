@@ -1,4 +1,5 @@
-import type { BracketPicks, Match, RoundId, Team } from "./types";
+import type { BracketPicks, Match, RoundId, Side, Team } from "./types";
+import type { DbMatch } from "./supabase-data";
 
 /**
  * 32-team knockout tournament (Round of 32 → R16 → QF → SF → Final = 31 matches),
@@ -130,3 +131,45 @@ export const SCORES: Record<string, { a: string; b: string }> = {
   J79: { a: "2", b: "0" },
   J80: { a: "0", b: "1" }, // live (halftime)
 };
+
+const ROUND_RANK: Record<string, number> = { R32: 0, R16: 1, QF: 2, SF: 3, F: 4 };
+
+function fmtKickoff(iso: string): string {
+  const d = new Date(iso);
+  const p = (n: number) => String(n).padStart(2, "0");
+  return `${p(d.getUTCDate())}/${p(d.getUTCMonth() + 1)} ${p(d.getUTCHours())}:${p(d.getUTCMinutes())}`;
+}
+
+/**
+ * Hydrate the in-memory bracket from Supabase `matches` rows. The DB uses M-prefixed
+ * ids (M74…M104); we remap them to the frontend's J-prefix so nothing else changes.
+ * Mutates MATCHES/MATCH_BY_ID/RESULTS/SCORES in place (kept as live references).
+ * The 3rd-place match (round '3P') is skipped — it isn't part of the prediction.
+ */
+export function applyDbMatches(rows: DbMatch[]): void {
+  const toJ = (id: string | null) => (id ? id.replace(/^M/, "J") : undefined);
+  const used = rows
+    .filter((r) => r.round !== "3P")
+    .sort((a, b) => (ROUND_RANK[a.round] - ROUND_RANK[b.round]) || a.sort - b.sort);
+
+  const next: Match[] = used.map((r) => ({
+    id: toJ(r.id)!,
+    round: r.round as RoundId,
+    side: r.side as Side,
+    a: r.team_a ? { teamId: r.team_a } : { from: toJ(r.feed_a) },
+    b: r.team_b ? { teamId: r.team_b } : { from: toJ(r.feed_b) },
+    kickoff: r.kickoff ? fmtKickoff(r.kickoff) : undefined,
+    live: r.status === "live",
+  }));
+
+  MATCHES.length = 0;
+  MATCHES.push(...next);
+  for (const k of Object.keys(MATCH_BY_ID)) delete MATCH_BY_ID[k];
+  for (const m of next) MATCH_BY_ID[m.id] = m;
+  for (const k of Object.keys(RESULTS)) delete RESULTS[k];
+  for (const r of used) if (r.winner) RESULTS[toJ(r.id)!] = r.winner;
+  for (const k of Object.keys(SCORES)) delete SCORES[k];
+  for (const r of used)
+    if (r.score_a != null || r.score_b != null)
+      SCORES[toJ(r.id)!] = { a: r.score_a ?? "", b: r.score_b ?? "" };
+}

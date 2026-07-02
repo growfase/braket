@@ -51,7 +51,7 @@ export function MiniBracket() {
 
   return (
     <div className="overflow-x-auto">
-      <div ref={ref} className="relative flex w-max items-stretch justify-center gap-2">
+      <div ref={ref} className="relative mx-auto flex w-max items-stretch gap-2">
         <BracketConnectors containerRef={ref} strokeWidth={1} />
         <MiniSide side="left" effective={effective} />
         <div className="relative z-10 flex shrink-0 items-center">

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { usePhantomConnect } from "@/lib/wallet-provider";
 import { cn } from "@/lib/utils";
 import { shortAddr } from "@/lib/format";
-import logoUrl from "@assets/logo_braket_1.webp";
+import logoUrl from "@assets/logo_02.webp";
 
 export type Tab = "bracket" | "predictions";
 

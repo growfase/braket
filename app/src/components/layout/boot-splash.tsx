@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import logoUrl from "@assets/logo_braket_1.webp";
+import logoUrl from "@assets/logo_02.webp";
 import trophyUrl from "@assets/trophy.webp";
 import bgUrl from "@assets/background.webp";
 

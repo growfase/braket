@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { usePhantomConnect } from "@/lib/wallet-provider";
 import { shortAddr } from "@/lib/format";
 import { MIN_STAKE_SOL } from "@/lib/config";
-import logoUrl from "@assets/logo_braket_1.webp";
+import logoUrl from "@assets/logo_02.webp";
 import trophyUrl from "@assets/trophy.webp";
 
 function Feature({
