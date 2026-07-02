@@ -54,3 +54,16 @@ output/
 # Cloudflare Wrangler / miniflare local cache
 .wrangler/
 **/.wrangler/
+
+# Build caches & coverage (defensive)
+*.tsbuildinfo
+.vite/
+**/.vite/
+coverage/
+.turbo/
+.vercel/
+.netlify/
+# Supabase CLI local state (keep migrations + functions; ignore local runtime)
+supabase/.branches/
+supabase/.temp/
+supabase/.env

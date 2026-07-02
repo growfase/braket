@@ -130,5 +130,5 @@ on conflict (id) do nothing;
 
 -- ─────────────────────────── Seed: pool ───────────────────────────
 insert into pool (id, tournament, prize_pool_sol, pool_wallet, final_at) values
-  (1,'World Cup',0,'6eh7jHzGYSdiu1NjWLd6pR4eWEmXR9S7pqDTUKJNpFcm','2026-07-19 20:00+00')
+  (1,'World Cup',0,'Df8VYYtXeAAECtKJ9iVTtmQsDLQnUEzXodDitmXQznQp','2026-07-19 20:00+00')
 on conflict (id) do update set pool_wallet = excluded.pool_wallet, final_at = excluded.final_at;
