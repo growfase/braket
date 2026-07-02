@@ -1,0 +1,56 @@
+# Environment & Secrets (AIOX)
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+
+# Dependencies (AIOX)
+node_modules/
+node_modules
+
+# Build & Logs (AIOX)
+dist/
+build/
+*.log
+logs/
+*.pid
+.codex-installers/
+
+# IDE & OS (AIOX)
+.DS_Store
+Thumbs.db
+.idea/
+*.swp
+
+# AIOX Local (AIOX)
+.aiox-core/local/
+.claude/settings.local.json
+.claude/launch.json
+.aiox/install-log.txt
+
+# Web3 / Anchor
+.secrets/
+target/
+.anchor/
+test-ledger/
+**/*.rs.bk
+.yarn/
+yarn-error.log
+
+# AIOX framework + agent/IDE runtime (local tooling, not part of the deployed app)
+.aiox-core/
+.aiox/
+.agents/
+.ai/
+.codex/
+.cursor/
+.gemini/
+.kimi/
+
+# Stray/scratch artifacts
+output/
+
+# Cloudflare Wrangler / miniflare local cache
+.wrangler/
+**/.wrangler/

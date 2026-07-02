@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+/* Country flags (SVG sprite). */
+@import "flag-icons/css/flag-icons.min.css";
+
+/* Wallet-adapter modal styles (kept minimal; we mostly use our own button). */
+@import "@solana/wallet-adapter-react-ui/styles.css";
+
+/*
+  Cup Predict theme — dark, deep-space blue with gold trophy + cyan accents.
+  Tailwind v4: design tokens live here and are exposed as utilities via @theme.
+*/
+@theme {
+  --color-bg: #05070f;
+  --color-bg-soft: #0a0e1c;
+  --color-panel: #0d1324;
+  --color-panel-2: #111a30;
+  --color-border: #1c2740;
+  --color-border-soft: #16203a;
+
+  --color-fg: #e9eefb;
+  --color-muted: #8a97b8;
+
+  --color-gold: #f7c843;
+  --color-gold-soft: #d9a621;
+  --color-cyan: #2ee6ff;
+  --color-cyan-soft: #12b5d6;
+  --color-green: #22c55e;
+  --color-red: #ef4444;
+
+  --font-sans: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(1200px 700px at 50% -10%, #0b1430 0%, transparent 60%),
+    radial-gradient(900px 600px at 50% 120%, #0a1a28 0%, transparent 55%),
+    var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Thin, themed scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+/* Subtle glow helper */
+.glow-cyan {
+  box-shadow: 0 0 0 1px rgba(46, 230, 255, 0.35), 0 0 22px rgba(46, 230, 255, 0.18);
+}
+.glow-gold {
+  box-shadow: 0 0 0 1px rgba(247, 200, 67, 0.4), 0 0 26px rgba(247, 200, 67, 0.16);
+}
+
+/* Override wallet-adapter button to match our theme when it renders */
+.wallet-adapter-button {
+  font-family: var(--font-sans) !important;
+}
