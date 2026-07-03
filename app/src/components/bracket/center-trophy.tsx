@@ -57,7 +57,7 @@ export function CenterTrophy({ onPlace }: { onPlace: () => void }) {
   const pct = toPredict > 0 ? Math.round((predicted / toPredict) * 100) : 0;
 
   return (
-    <div className="relative flex min-h-[440px] w-full max-w-[300px] items-center justify-center sm:min-h-[600px]">
+    <div className="relative flex min-h-[440px] w-[340px] max-w-full items-center justify-center sm:min-h-[600px]">
       {/* Trophy — big centerpiece in the middle of the bracket */}
       <img
         src={trophyUrl}
@@ -82,7 +82,7 @@ export function CenterTrophy({ onPlace }: { onPlace: () => void }) {
           <div className="mb-2 text-center text-xs font-semibold uppercase tracking-wider text-muted">
             Final · Your Champion
           </div>
-          <div className="flex items-center justify-between rounded-2xl border border-cyan/30 bg-panel/70 px-3 py-3 glow-cyan backdrop-blur-sm">
+          <div className="flex items-center justify-between rounded-2xl border border-cyan/30 bg-panel/70 px-5 py-3.5 glow-cyan backdrop-blur-sm">
             <Finalist
               teamId={aId}
               align="left"
