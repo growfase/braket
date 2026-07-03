@@ -21,11 +21,13 @@ export const QUICK_STAKES = [0.1, 0.5, 1] as const;
 export const TREASURY_ADDRESS = "REPLACE_WITH_TREASURY_PUBKEY";
 
 /** Network used for the wallet connection. */
-export const SOLANA_CLUSTER: "devnet" | "mainnet-beta" = "devnet";
+export const SOLANA_CLUSTER: "devnet" | "mainnet-beta" = "mainnet-beta";
 
-/** RPC endpoint used to build the on-chain deposit transfer (devnet by default). */
+/** RPC endpoint for the wallet connection + on-chain transfers. Prefer a
+ *  dedicated RPC (VITE_SOLANA_RPC_URL); falls back to the public mainnet RPC. */
 export const SOLANA_RPC_URL =
-  (import.meta.env.VITE_SOLANA_RPC_URL as string | undefined) ?? "https://api.devnet.solana.com";
+  (import.meta.env.VITE_SOLANA_RPC_URL as string | undefined) ??
+  "https://api.mainnet-beta.solana.com";
 
 export const TOURNAMENT_NAME = "World Cup";
 

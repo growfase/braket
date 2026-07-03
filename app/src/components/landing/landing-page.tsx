@@ -84,7 +84,7 @@ export function LandingPage({ onEnter }: { onEnter: () => void }) {
             <Wallet size={13} /> Connect Phantom
           </button>
         )}
-        <span className="text-[11px] text-muted">Solana · devnet · v1 mock (no real SOL yet)</span>
+        <span className="text-[11px] text-muted">Solana · mainnet</span>
       </div>
     </div>
   );

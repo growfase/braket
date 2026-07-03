@@ -5,6 +5,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import * as ed from "https://esm.sh/@noble/ed25519@2";
 import bs58 from "https://esm.sh/bs58@6";
 import { corsHeaders, json } from "../_shared/cors.ts";
+import { decryptSecret } from "../_shared/crypto.ts";
 
 const FEE_LAMPORTS = 5000n; // 1 signature
 const SYSTEM_PROGRAM = new Uint8Array(32); // "111...1" = 32 zero bytes
@@ -153,7 +154,8 @@ Deno.serve(async (req) => {
           results.push({ id: p.id, skip: "no secret" });
           continue;
         }
-        const out = await sweepOne(rpc, poolPub, p.deposit_wallet, JSON.parse(sec.secret));
+        const decrypted = await decryptSecret(sec.secret);
+        const out = await sweepOne(rpc, poolPub, p.deposit_wallet, JSON.parse(decrypted));
         if ("skip" in out) {
           results.push({ id: p.id, skip: out.skip });
           continue;

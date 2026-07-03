@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, type ReactNode } from "react";
-import { clusterApiUrl } from "@solana/web3.js";
 import { ConnectionProvider, WalletProvider, useWallet } from "@solana/wallet-adapter-react";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
-import { SOLANA_CLUSTER } from "./config";
+import { SOLANA_RPC_URL } from "./config";
 
 const PHANTOM = "Phantom";
 
@@ -12,7 +11,7 @@ const PHANTOM = "Phantom";
  * it directly (see `usePhantomConnect`) without showing a multi-wallet modal.
  */
 export function SolanaWalletProvider({ children }: { children: ReactNode }) {
-  const endpoint = useMemo(() => clusterApiUrl(SOLANA_CLUSTER), []);
+  const endpoint = useMemo(() => SOLANA_RPC_URL, []);
 
   return (
     <ConnectionProvider endpoint={endpoint}>

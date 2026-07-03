@@ -288,7 +288,7 @@ export function StakeModal({ open, onClose }: { open: boolean; onClose: () => vo
             Confirm bracket · {valid ? fmtSol(amount) : "·"}
           </Button>
           <p className="mt-2 text-center text-[11px] text-muted">
-            A unique deposit address is generated next. Pay from any Solana wallet (devnet).
+            A unique deposit address is generated next. Pay from any Solana wallet.
           </p>
         </>
       )}
@@ -342,7 +342,7 @@ export function StakeModal({ open, onClose }: { open: boolean; onClose: () => vo
           {/* Address */}
           <div className="mt-3 w-full">
             <div className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-muted">
-              Deposit address · devnet
+              Deposit address
             </div>
             <button
               onClick={() => {

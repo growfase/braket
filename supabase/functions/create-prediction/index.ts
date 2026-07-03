@@ -6,6 +6,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import * as ed from "https://esm.sh/@noble/ed25519@2";
 import bs58 from "https://esm.sh/bs58@6";
 import { corsHeaders, json } from "../_shared/cors.ts";
+import { encryptSecret } from "../_shared/crypto.ts";
 
 /** Canonical fingerprint of a picks map (sorted keys) so identical brackets match. */
 async function hashPicks(picks: Record<string, string>): Promise<string> {
@@ -47,7 +48,7 @@ Deno.serve(async (req) => {
     secretKey.set(seed, 0);
     secretKey.set(pub, 32);
     const depositAddress = bs58.encode(pub);
-    const secret = JSON.stringify(Array.from(secretKey));
+    const secret = await encryptSecret(JSON.stringify(Array.from(secretKey)));
     const picksHash = await hashPicks(picks);
 
     const { data, error } = await supabase
