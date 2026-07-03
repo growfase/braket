@@ -14,7 +14,7 @@ const SYSTEM_PROGRAM = new Uint8Array(32); // "111...1" = 32 zero bytes
 async function rpcCall(url: string, method: string, params: any[]): Promise<any> {
   const r = await fetch(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", Origin: "https://cupbracket.xyz" },
     body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }),
   });
   const j = await r.json();

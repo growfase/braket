@@ -11,7 +11,7 @@ const LAMPORTS_PER_SOL = 1_000_000_000;
 async function rpcCall(rpc: string, method: string, params: any[]): Promise<any> {
   const r = await fetch(rpc, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", Origin: "https://cupbracket.xyz" },
     body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }),
   });
   const j = await r.json();
