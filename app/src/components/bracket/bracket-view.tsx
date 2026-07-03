@@ -74,7 +74,7 @@ export function BracketView() {
           <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted">
             {mode === "picks" ? "Fill your bracket" : "Who advanced"}
           </div>
-          <div className="-mx-3 flex gap-4 overflow-x-auto px-3 pb-3">
+          <div className="no-scrollbar -mx-3 flex gap-4 overflow-x-auto px-3 pb-3">
             <BracketSide side="left" mode={mode} />
             <BracketSide side="right" mode={mode} />
           </div>
@@ -83,7 +83,7 @@ export function BracketView() {
 
       {/* Desktop: left half | trophy | right half.
           Centers when it fits; scrolls from the left (R32 first) when it doesn't. */}
-      <div className="hidden overflow-x-auto pb-4 lg:block">
+      <div className="no-scrollbar hidden overflow-x-auto pb-4 lg:block">
         <div ref={desktopRef} className="relative mx-auto flex w-max items-center gap-5 xl:gap-8">
           <BracketConnectors containerRef={desktopRef} />
           <div className="relative z-10">

@@ -90,7 +90,7 @@ function PredictionCard({ p }: { p: Prediction }) {
             {open ? "Hide bracket" : "View full bracket"}
           </button>
           {open && (
-            <div className="mt-3 overflow-x-auto rounded-xl border border-border bg-bg-soft/60 p-3">
+            <div className="no-scrollbar mt-3 overflow-x-auto rounded-xl border border-border bg-bg-soft/60 p-3">
               <MiniBracket picks={p.picks} />
             </div>
           )}

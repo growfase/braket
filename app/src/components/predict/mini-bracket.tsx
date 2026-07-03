@@ -54,7 +54,7 @@ export function MiniBracket({ picks: picksProp }: { picks?: BracketPicks } = {})
   const ref = useRef<HTMLDivElement>(null);
 
   return (
-    <div className="overflow-x-auto">
+    <div className="no-scrollbar overflow-x-auto">
       <div ref={ref} className="relative mx-auto flex w-max items-stretch gap-2">
         <BracketConnectors containerRef={ref} strokeWidth={1} />
         <MiniSide side="left" effective={effective} />

@@ -64,7 +64,7 @@ export function LandingPage({ onEnter }: { onEnter: () => void }) {
         <Feature
           icon={<Target size={20} />}
           title="Closest wins it all"
-          desc="1 point per correct match. The single closest bracket takes the pot."
+          desc="The bracket that matches the most real results wins the entire pot."
         />
       </div>
 
