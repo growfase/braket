@@ -8,7 +8,7 @@ import {
   type ReactNode,
 } from "react";
 import type { BracketPicks, Prediction } from "./types";
-import { STORAGE_KEY } from "./config";
+import { PRIZE_POOL_BASE_SOL, STORAGE_KEY } from "./config";
 import {
   applyPick,
   getChampionId,
@@ -28,7 +28,12 @@ interface PersistedState {
   poolSol: number;
 }
 
-const EMPTY: PersistedState = { picks: {}, locked: false, predictions: [], poolSol: 0 };
+const EMPTY: PersistedState = {
+  picks: {},
+  locked: false,
+  predictions: [],
+  poolSol: PRIZE_POOL_BASE_SOL,
+};
 
 function load(): PersistedState {
   try {
@@ -39,7 +44,7 @@ function load(): PersistedState {
       picks: parsed.picks ?? {},
       locked: parsed.locked ?? false,
       predictions: parsed.predictions ?? [],
-      poolSol: parsed.poolSol ?? 0,
+      poolSol: parsed.poolSol ?? PRIZE_POOL_BASE_SOL,
     };
   } catch {
     return EMPTY;
@@ -51,6 +56,7 @@ interface RecordInput {
   stakeSol: number;
   depositAddress?: string;
   paymentStatus?: "awaiting" | "paid";
+  bracketHash?: string;
 }
 
 interface PredictionContextValue {
@@ -81,9 +87,10 @@ export function PredictionProvider({ children }: { children: ReactNode }) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   }, [state]);
 
+  // Displayed pool = guaranteed base + real deposits (DB tracks deposits only).
   const refreshPool = useCallback(async () => {
     const sol = await fetchPoolSol();
-    if (sol != null) setState((s) => ({ ...s, poolSol: sol }));
+    if (sol != null) setState((s) => ({ ...s, poolSol: PRIZE_POOL_BASE_SOL + sol }));
   }, []);
 
   // Load the live pool on mount (falls back to the cached value if offline).
@@ -116,6 +123,7 @@ export function PredictionProvider({ children }: { children: ReactNode }) {
         championName: champion.name,
         championFlag: champion.flag ?? "",
         picks: { ...s.picks },
+        bracketHash: input.bracketHash,
         stakeSol: input.stakeSol,
         createdAt: Date.now(),
         status: "pending",

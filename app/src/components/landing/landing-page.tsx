@@ -47,7 +47,7 @@ export function LandingPage({ onEnter }: { onEnter: () => void }) {
       </h1>
       <p className="mt-3 max-w-xl text-muted">
         Call every match of the knockout cup, stake in SOL, and the bracket closest to reality
-        takes the whole prize pool — winner-takes-all.
+        takes the whole prize pool. Winner takes all.
       </p>
 
       <div className="mt-8 grid w-full gap-3 sm:grid-cols-3">

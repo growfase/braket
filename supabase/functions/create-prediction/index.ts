@@ -7,6 +7,18 @@ import * as ed from "https://esm.sh/@noble/ed25519@2";
 import bs58 from "https://esm.sh/bs58@6";
 import { corsHeaders, json } from "../_shared/cors.ts";
 
+/** Canonical fingerprint of a picks map (sorted keys) so identical brackets match. */
+async function hashPicks(picks: Record<string, string>): Promise<string> {
+  const canon = Object.keys(picks)
+    .sort()
+    .map((k) => `${k}:${picks[k]}`)
+    .join("|");
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(canon));
+  return Array.from(new Uint8Array(buf))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   try {
@@ -36,12 +48,14 @@ Deno.serve(async (req) => {
     secretKey.set(pub, 32);
     const depositAddress = bs58.encode(pub);
     const secret = JSON.stringify(Array.from(secretKey));
+    const picksHash = await hashPicks(picks);
 
     const { data, error } = await supabase
       .from("predictions")
       .insert({
         wallet: payoutWallet,
         picks,
+        picks_hash: picksHash,
         champion_team_id: championTeamId,
         stake_sol: stakeSol,
         amount_sol: stakeSol,
@@ -58,7 +72,7 @@ Deno.serve(async (req) => {
       .insert({ prediction_id: data.id, secret });
     if (sErr) return json({ error: sErr.message }, 500);
 
-    return json({ predictionId: data.id, depositAddress, amountSol: stakeSol });
+    return json({ predictionId: data.id, depositAddress, amountSol: stakeSol, bracketHash: picksHash });
   } catch (e) {
     return json({ error: e instanceof Error ? e.message : String(e) }, 500);
   }

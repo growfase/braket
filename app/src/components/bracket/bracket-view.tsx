@@ -72,7 +72,7 @@ export function BracketView() {
         </div>
         <div>
           <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted">
-            {mode === "picks" ? "Fill your bracket" : "Tournament bracket — who advanced"}
+            {mode === "picks" ? "Fill your bracket" : "Who advanced"}
           </div>
           <div className="-mx-3 flex gap-4 overflow-x-auto px-3 pb-3">
             <BracketSide side="left" mode={mode} />

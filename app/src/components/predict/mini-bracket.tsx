@@ -43,9 +43,13 @@ function MiniSide({ side, effective }: { side: "left" | "right"; effective: Brac
   );
 }
 
-/** Compact read-only view of the whole picked bracket (miniature flags + connectors). */
-export function MiniBracket() {
-  const { picks } = usePredictions();
+/**
+ * Compact read-only view of a picked bracket (miniature flags + connectors).
+ * Defaults to the live store picks; pass `picks` to render a saved prediction.
+ */
+export function MiniBracket({ picks: picksProp }: { picks?: BracketPicks } = {}) {
+  const store = usePredictions();
+  const picks = picksProp ?? store.picks;
   const effective = { ...RESULTS, ...picks };
   const ref = useRef<HTMLDivElement>(null);
 

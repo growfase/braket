@@ -52,6 +52,11 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Interactive buttons use the pointer cursor (native default is an arrow). */
+button:not(:disabled) {
+  cursor: pointer;
+}
+
 /* Thin, themed scrollbars */
 * {
   scrollbar-width: thin;

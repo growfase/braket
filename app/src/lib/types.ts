@@ -44,6 +44,8 @@ export interface Prediction {
   championName: string;
   championFlag: string;
   picks?: BracketPicks;
+  /** Canonical hash of the picks — identical brackets share the same value. */
+  bracketHash?: string;
   stakeSol: number;
   createdAt: number;
   /** Server-generated deposit address for this prediction (payment target). */

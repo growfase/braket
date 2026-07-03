@@ -11,6 +11,9 @@ export const MIN_STAKE_SOL = 0.1;
 
 /** 100% of every stake funds the prize pool (no buyback, no house cut in v1). */
 
+/** Guaranteed base added on top of real deposits when displaying the prize pool. */
+export const PRIZE_POOL_BASE_SOL = 10;
+
 /** Convenience quick-stake buttons in the stake modal. */
 export const QUICK_STAKES = [0.1, 0.5, 1] as const;
 

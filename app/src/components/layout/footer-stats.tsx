@@ -57,7 +57,7 @@ export function FooterStats() {
                 {champ.code}
               </span>
             ) : (
-              "—"
+              "·"
             )
           }
           sub={champ?.name}

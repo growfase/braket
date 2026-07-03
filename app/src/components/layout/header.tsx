@@ -73,7 +73,7 @@ export function Header({
             active={activeTab === "predictions"}
             onClick={() => onTabChange("predictions")}
             icon={<LineChart size={16} />}
-            label="Predictions"
+            label="My Bracket"
           />
         </nav>
 
@@ -105,7 +105,7 @@ export function Header({
           active={activeTab === "predictions"}
           onClick={() => onTabChange("predictions")}
           icon={<LineChart size={16} />}
-          label="Predictions"
+          label="My Bracket"
         />
       </nav>
     </header>

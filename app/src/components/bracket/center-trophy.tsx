@@ -67,7 +67,7 @@ export function CenterTrophy({ onPlace }: { onPlace: () => void }) {
       />
 
       {/* Info overlaid on the trophy */}
-      <div className="relative z-10 flex w-full flex-col items-center gap-3">
+      <div className="relative z-10 flex w-full flex-col items-center gap-4">
         {/* Prize pot */}
         <div className="w-full rounded-2xl border border-gold/40 bg-gold/5 px-5 py-4 text-center glow-gold backdrop-blur-sm">
           <div className="text-xs font-semibold uppercase tracking-wider text-gold/80">

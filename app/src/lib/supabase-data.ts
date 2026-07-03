@@ -45,6 +45,8 @@ export interface CreatePredictionResult {
   predictionId?: string;
   depositAddress?: string;
   amountSol?: number;
+  /** Canonical hash of the picks — identical brackets share it. */
+  bracketHash?: string;
 }
 
 /**
@@ -73,10 +75,30 @@ export async function createPrediction(p: {
       predictionId: data.predictionId,
       depositAddress: data.depositAddress,
       amountSol: data.amountSol,
+      bracketHash: data.bracketHash,
     };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : "create failed" };
   }
+}
+
+/**
+ * Aggregate stats for one bracket fingerprint: how many PAID players share this
+ * exact bracket and the total SOL they staked. Used in "My Bracket" to show the
+ * stake-weighted split among identical winning brackets.
+ */
+export async function fetchBracketGroup(
+  hash: string,
+): Promise<{ count: number; totalStake: number } | null> {
+  if (!supabase) return null;
+  const { data, error } = await supabase
+    .from("predictions")
+    .select("stake_sol")
+    .eq("picks_hash", hash)
+    .eq("payment_status", "paid");
+  if (error || !data) return null;
+  const totalStake = data.reduce((s, r) => s + Number(r.stake_sol ?? 0), 0);
+  return { count: data.length, totalStake };
 }
 
 /** Ask the server to check the deposit wallet and mark the prediction paid. */

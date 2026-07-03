@@ -31,6 +31,7 @@ interface Deposit {
   predictionId: string;
   address: string;
   amount: number;
+  bracketHash?: string;
 }
 
 function ModalTitle() {
@@ -108,6 +109,7 @@ export function StakeModal({ open, onClose }: { open: boolean; onClose: () => vo
       stakeSol: d.amount,
       depositAddress: d.address,
       paymentStatus: "paid",
+      bracketHash: d.bracketHash,
     });
     void refreshPool();
     setStep("success");
@@ -142,7 +144,12 @@ export function StakeModal({ open, onClose }: { open: boolean; onClose: () => vo
       setStep("review");
       return;
     }
-    setDeposit({ predictionId: res.predictionId, address: res.depositAddress, amount: res.amountSol ?? amount });
+    setDeposit({
+      predictionId: res.predictionId,
+      address: res.depositAddress,
+      amount: res.amountSol ?? amount,
+      bracketHash: res.bracketHash,
+    });
     setStep("pay");
   }
 
@@ -162,7 +169,7 @@ export function StakeModal({ open, onClose }: { open: boolean; onClose: () => vo
         }),
       );
       const sig = await sendTransaction(tx, connection);
-      toast.message("Payment sent — confirming…");
+      toast.message("Payment sent. Confirming…");
       await connection.confirmTransaction(sig, "confirmed");
       const r = await checkPayment(deposit.predictionId);
       if (r.paid) finalizePaid(deposit, r.wallet ?? publicKey.toBase58());
@@ -199,7 +206,7 @@ export function StakeModal({ open, onClose }: { open: boolean; onClose: () => vo
             <div className="flex items-center justify-between rounded-xl border border-gold/50 bg-gold/10 px-4 py-3">
               <div className="flex items-center gap-2">
                 {champion && <Flag iso={champion.iso} code={champion.code} size={22} />}
-                <span className="text-lg font-extrabold text-gold">{champion?.name ?? "—"}</span>
+                <span className="text-lg font-extrabold text-gold">{champion?.name ?? "·"}</span>
               </div>
               <Trophy size={18} className="text-gold" />
             </div>
@@ -260,7 +267,7 @@ export function StakeModal({ open, onClose }: { open: boolean; onClose: () => vo
             </div>
             <div className="flex items-center justify-between">
               <span className="text-muted">Your stake · 100% added</span>
-              <span className="font-semibold text-fg">{valid ? `+${fmtSol(amount)}` : "—"}</span>
+              <span className="font-semibold text-fg">{valid ? `+${fmtSol(amount)}` : "·"}</span>
             </div>
             <div className="flex items-center justify-between border-t border-border pt-2">
               <span className="font-semibold text-fg">Pool if you enter</span>
@@ -278,10 +285,10 @@ export function StakeModal({ open, onClose }: { open: boolean; onClose: () => vo
             onClick={handleConfirm}
           >
             <CheckCircle2 size={16} />
-            Confirm bracket · {valid ? fmtSol(amount) : "—"}
+            Confirm bracket · {valid ? fmtSol(amount) : "·"}
           </Button>
           <p className="mt-2 text-center text-[11px] text-muted">
-            A unique deposit address is generated next — pay from any Solana wallet (devnet).
+            A unique deposit address is generated next. Pay from any Solana wallet (devnet).
           </p>
         </>
       )}
@@ -369,8 +376,8 @@ export function StakeModal({ open, onClose }: { open: boolean; onClose: () => vo
           </Button>
 
           <div className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg border border-cyan/25 bg-cyan/5 px-3 py-2 text-xs font-medium text-muted">
-            <Loader2 size={13} className="animate-spin text-cyan" /> Waiting for your deposit —
-            detected automatically
+            <Loader2 size={13} className="animate-spin text-cyan" /> Waiting for your deposit.
+            Detected automatically
           </div>
         </div>
       )}
@@ -385,7 +392,7 @@ export function StakeModal({ open, onClose }: { open: boolean; onClose: () => vo
             <div className="text-lg font-extrabold text-gold">Prediction confirmed!</div>
             <div className="max-w-xs text-sm text-muted">
               Your {deposit ? fmtSol(deposit.amount) : ""} deposit was detected and your bracket is
-              locked. Track it under My Predictions — the closest bracket wins the pot.
+              locked. Track it under My Bracket. The closest bracket wins the pot.
             </div>
             <Button variant="primary" size="lg" className="mt-1 w-full" onClick={handleClose}>
               Done
