@@ -1,9 +1,6 @@
-import { useWallet } from "@solana/wallet-adapter-react";
-import { GitFork, ListChecks, Target, Wallet } from "lucide-react";
+import { GitFork, ListChecks, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { usePhantomConnect } from "@/lib/wallet-provider";
-import { shortAddr } from "@/lib/format";
 import { MIN_STAKE_SOL } from "@/lib/config";
 import logoUrl from "@assets/logo_02.webp";
 import trophyUrl from "@assets/trophy.webp";
@@ -29,9 +26,6 @@ function Feature({
 }
 
 export function LandingPage({ onEnter }: { onEnter: () => void }) {
-  const { connected, publicKey } = useWallet();
-  const connectPhantom = usePhantomConnect();
-
   return (
     <div className="mx-auto flex min-h-screen max-w-4xl flex-col items-center justify-center px-4 py-12 text-center">
       <img
@@ -72,19 +66,6 @@ export function LandingPage({ onEnter }: { onEnter: () => void }) {
         <Button variant="gold" size="lg" className="px-10" onClick={onEnter}>
           Launch app →
         </Button>
-        {connected && publicKey ? (
-          <span className="text-xs text-muted">
-            Connected · {shortAddr(publicKey.toBase58())}
-          </span>
-        ) : (
-          <button
-            onClick={connectPhantom}
-            className="flex items-center gap-1.5 text-xs font-semibold text-cyan hover:underline"
-          >
-            <Wallet size={13} /> Connect Phantom
-          </button>
-        )}
-        <span className="text-[11px] text-muted">Solana · mainnet</span>
       </div>
     </div>
   );
