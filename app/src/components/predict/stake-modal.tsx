@@ -115,7 +115,8 @@ export function StakeModal({ open, onClose }: { open: boolean; onClose: () => vo
     setStep("success");
   }
 
-  // Poll for payment while on the pay step.
+  // Poll for payment while the deposit modal is open: check immediately, then
+  // every few seconds until detected.
   useEffect(() => {
     if (step !== "pay" || !deposit) return;
     let active = true;
@@ -123,7 +124,8 @@ export function StakeModal({ open, onClose }: { open: boolean; onClose: () => vo
       const r = await checkPayment(deposit.predictionId);
       if (active && r.paid) finalizePaid(deposit, r.wallet);
     };
-    const id = setInterval(tick, 4000);
+    void tick(); // instant check on open (no initial wait)
+    const id = setInterval(tick, 5000);
     return () => {
       active = false;
       clearInterval(id);
