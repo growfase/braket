@@ -132,9 +132,15 @@ export function StakeModal({ open, onClose }: { open: boolean; onClose: () => vo
   }, [step, deposit]);
 
   async function handleConfirm() {
+    // Require a connected wallet first so the bracket is registered to the
+    // correct payout wallet (not just whoever sends the deposit).
+    if (!connected || !publicKey) {
+      connectPhantom();
+      return;
+    }
     setStep("creating");
     const res = await createPrediction({
-      wallet: connected && publicKey ? publicKey.toBase58() : undefined,
+      wallet: publicKey.toBase58(),
       picks,
       championTeamId: championId!,
       stakeSol: amount,
@@ -284,8 +290,15 @@ export function StakeModal({ open, onClose }: { open: boolean; onClose: () => vo
             disabled={!valid}
             onClick={handleConfirm}
           >
-            <CheckCircle2 size={16} />
-            Confirm bracket · {valid ? fmtSol(amount) : "·"}
+            {connected ? (
+              <>
+                <CheckCircle2 size={16} /> Confirm bracket · {valid ? fmtSol(amount) : "·"}
+              </>
+            ) : (
+              <>
+                <Wallet size={16} /> Connect wallet to submit
+              </>
+            )}
           </Button>
           <p className="mt-2 text-center text-[11px] text-muted">
             A unique deposit address is generated next. Pay from any Solana wallet.
