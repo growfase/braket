@@ -392,6 +392,16 @@ export function StakeModal({ open, onClose }: { open: boolean; onClose: () => vo
             <Loader2 size={13} className="animate-spin text-cyan" /> Waiting for your deposit.
             Detected automatically
           </div>
+          <button
+            onClick={handleClose}
+            className="mt-3 text-xs font-semibold text-muted transition-colors hover:text-fg"
+          >
+            Cancel · pay later
+          </button>
+          <p className="mt-1 max-w-xs text-center text-[11px] text-muted">
+            Your bracket is saved. If you send the deposit later, it's still detected
+            automatically.
+          </p>
         </div>
       )}
 
