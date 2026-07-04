@@ -105,6 +105,27 @@ Deno.serve(async (req) => {
       }
     }
 
+    // If anything was newly credited, fire an immediate sweep (background).
+    if (credited.length > 0) {
+      const sweepKey = Deno.env.get("SWEEP_KEY");
+      const url = Deno.env.get("SUPABASE_URL");
+      const svc = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+      if (sweepKey && url && svc) {
+        const pr = fetch(`${url}/functions/v1/sweep`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${svc}`,
+            apikey: svc,
+            "x-sweep-key": sweepKey,
+          },
+          body: "{}",
+        }).catch(() => {});
+        // deno-lint-ignore no-explicit-any
+        (globalThis as any).EdgeRuntime?.waitUntil?.(pr);
+      }
+    }
+
     return json({ checked: preds?.length ?? 0, credited });
   } catch (e) {
     return json({ error: e instanceof Error ? e.message : String(e) }, 500);

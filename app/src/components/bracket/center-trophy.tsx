@@ -137,7 +137,7 @@ export function CenterTrophy({ onPlace }: { onPlace: () => void }) {
           </div>
         ) : complete ? (
           <Button variant="gold" size="lg" className="w-full" onClick={onPlace}>
-            <Crown size={16} /> Place Prediction
+            <Crown size={16} /> Place Bracket
           </Button>
         ) : (
           <p className="text-center text-sm text-muted">

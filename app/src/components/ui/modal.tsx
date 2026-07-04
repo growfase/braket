@@ -8,20 +8,26 @@ interface ModalProps {
   title?: ReactNode;
   children: ReactNode;
   className?: string;
+  /** When false, backdrop click + Esc don't close (only the X). Default true. */
+  dismissable?: boolean;
 }
 
-/** Lightweight modal (no radix): overlay + centered panel, closes on Esc/backdrop. */
-export function Modal({ open, onClose, title, children, className }: ModalProps) {
+/** Lightweight modal (no radix): overlay + centered panel; closes on Esc/backdrop when dismissable. */
+export function Modal({ open, onClose, title, children, className, dismissable = true }: ModalProps) {
   useEffect(() => {
-    if (!open) return;
+    if (!open || !dismissable) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, dismissable, onClose]);
+
+  useEffect(() => {
+    if (!open) return;
     document.body.style.overflow = "hidden";
     return () => {
-      window.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
     };
-  }, [open, onClose]);
+  }, [open]);
 
   if (!open) return null;
 
@@ -33,7 +39,7 @@ export function Modal({ open, onClose, title, children, className }: ModalProps)
     >
       <div
         className="absolute inset-0 bg-black/70 backdrop-blur-sm"
-        onClick={onClose}
+        onClick={dismissable ? onClose : undefined}
         aria-hidden
       />
       <div

@@ -9,7 +9,6 @@ import {
   Gift,
   Loader2,
   PartyPopper,
-  Target,
   Trophy,
   Wallet,
 } from "lucide-react";
@@ -195,41 +194,36 @@ export function StakeModal({ open, onClose }: { open: boolean; onClose: () => vo
       open={open}
       onClose={handleClose}
       title={<ModalTitle />}
+      dismissable={step !== "pay" && step !== "creating"}
       className="max-h-[90vh] max-w-[560px] overflow-y-auto"
     >
       {step === "review" && (
         <>
-          <div className="rounded-2xl border border-border bg-bg-soft/60 p-3">
-            <div className="mb-3 flex items-center gap-2">
-              <CheckCircle2 size={20} className="text-cyan" />
-              <div>
-                <div className="font-bold text-cyan">Bracket complete</div>
-                <div className="text-xs text-muted">Your picks are locked for every round</div>
+          <div className="rounded-2xl border border-border bg-bg-soft/60 p-2.5">
+            <div className="mb-2 flex items-center gap-2">
+              <CheckCircle2 size={18} className="text-cyan" />
+              <div className="text-sm font-bold text-cyan">
+                Bracket complete
+                <span className="ml-2 text-xs font-normal text-muted">
+                  closest bracket wins the pot
+                </span>
               </div>
             </div>
             <MiniBracket />
           </div>
 
-          <div className="mt-4">
-            <div className="mb-1 text-sm font-semibold text-muted">Champion</div>
-            <div className="flex items-center justify-between rounded-xl border border-gold/50 bg-gold/10 px-4 py-3">
+          <div className="mt-3 flex items-center gap-2">
+            <span className="text-sm font-semibold text-muted">Champion:</span>
+            <div className="flex flex-1 items-center justify-between rounded-xl border border-gold/50 bg-gold/10 px-3 py-2">
               <div className="flex items-center gap-2">
-                {champion && <Flag iso={champion.iso} code={champion.code} size={22} />}
-                <span className="text-lg font-extrabold text-gold">{champion?.name ?? "·"}</span>
+                {champion && <Flag iso={champion.iso} code={champion.code} size={20} />}
+                <span className="text-base font-extrabold text-gold">{champion?.name ?? "·"}</span>
               </div>
-              <Trophy size={18} className="text-gold" />
+              <Trophy size={16} className="text-gold" />
             </div>
           </div>
 
-          <div className="mt-3 flex items-center gap-3 rounded-xl border border-border bg-bg-soft/60 px-4 py-3">
-            <Target size={20} className="shrink-0 text-cyan" />
-            <div>
-              <div className="font-bold text-fg">Closest bracket wins</div>
-              <div className="text-xs text-muted">Score updates after each match</div>
-            </div>
-          </div>
-
-          <label className="mb-1 mt-4 block text-sm font-semibold text-muted">Stake (SOL)</label>
+          <label className="mb-1 mt-3 block text-sm font-semibold text-muted">Stake (SOL)</label>
           <div className="flex items-center gap-2">
             <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-border bg-bg-soft">
               <SolanaIcon size={18} />
@@ -267,7 +261,7 @@ export function StakeModal({ open, onClose }: { open: boolean; onClose: () => vo
             </p>
           )}
 
-          <div className="mt-4 space-y-2 rounded-xl border border-border bg-bg-soft/60 p-3 text-sm">
+          <div className="mt-3 space-y-1.5 rounded-xl border border-border bg-bg-soft/60 p-2.5 text-sm">
             <div className="flex items-center justify-between">
               <span className="flex items-center gap-2 text-muted">
                 <Gift size={16} className="text-cyan" /> Current prize pool
@@ -289,7 +283,7 @@ export function StakeModal({ open, onClose }: { open: boolean; onClose: () => vo
           <Button
             variant="gold"
             size="lg"
-            className="mt-5 w-full"
+            className="mt-4 w-full"
             disabled={!valid}
             onClick={handleConfirm}
           >
@@ -303,7 +297,7 @@ export function StakeModal({ open, onClose }: { open: boolean; onClose: () => vo
               </>
             )}
           </Button>
-          <p className="mt-2 text-center text-[11px] text-muted">
+          <p className="mt-1.5 text-center text-[11px] text-muted">
             A unique deposit address is generated next. Pay from any Solana wallet.
           </p>
         </>

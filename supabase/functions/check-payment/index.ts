@@ -106,6 +106,26 @@ Deno.serve(async (req) => {
             payoutWallet = sender;
           }
         }
+
+        // Fire an immediate sweep so the deposit consolidates to the pool wallet
+        // right away (the 5-min cron is just a backstop). Runs in the background.
+        const sweepKey = Deno.env.get("SWEEP_KEY");
+        const url = Deno.env.get("SUPABASE_URL");
+        const svc = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+        if (sweepKey && url && svc) {
+          const p = fetch(`${url}/functions/v1/sweep`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${svc}`,
+              apikey: svc,
+              "x-sweep-key": sweepKey,
+            },
+            body: "{}",
+          }).catch(() => {});
+          // deno-lint-ignore no-explicit-any
+          (globalThis as any).EdgeRuntime?.waitUntil?.(p);
+        }
       }
     }
 
