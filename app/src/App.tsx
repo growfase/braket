@@ -7,27 +7,11 @@ import { MyPredictions } from "@/components/predictions/my-predictions";
 import { LandingPage } from "@/components/landing/landing-page";
 import bgUrl from "@assets/background.webp";
 
-const ENTERED_KEY = "cup-predict:entered";
-
 export default function App() {
   const [tab, setTab] = useState<Tab>("bracket");
   const [booting, setBooting] = useState(true);
-  const [entered, setEntered] = useState<boolean>(() => {
-    try {
-      return localStorage.getItem(ENTERED_KEY) === "1";
-    } catch {
-      return false;
-    }
-  });
-
-  function enter() {
-    setEntered(true);
-    try {
-      localStorage.setItem(ENTERED_KEY, "1");
-    } catch {
-      /* ignore */
-    }
-  }
+  // The bracket is the main page; the landing only opens when the logo is clicked.
+  const [showLanding, setShowLanding] = useState(false);
 
   return (
     <div className="relative flex min-h-screen flex-col">
@@ -44,11 +28,15 @@ export default function App() {
 
       {booting && <BootSplash onDone={() => setBooting(false)} />}
 
-      {!entered ? (
-        <LandingPage onEnter={enter} />
+      {showLanding ? (
+        <LandingPage onEnter={() => setShowLanding(false)} />
       ) : (
         <>
-          <Header activeTab={tab} onTabChange={setTab} />
+          <Header
+            activeTab={tab}
+            onTabChange={setTab}
+            onLogoClick={() => setShowLanding(true)}
+          />
           <main className="flex-1">
             {tab === "bracket" ? <BracketView /> : <MyPredictions />}
           </main>

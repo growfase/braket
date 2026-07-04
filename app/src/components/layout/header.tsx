@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { GitFork, LineChart, Wallet } from "lucide-react";
+import { Copy, GitFork, LineChart, LogOut, Wallet } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { usePhantomConnect } from "@/lib/wallet-provider";
 import { cn } from "@/lib/utils";
@@ -7,6 +9,17 @@ import { shortAddr } from "@/lib/format";
 import logoUrl from "@assets/logo_02.webp";
 
 export type Tab = "bracket" | "predictions";
+
+const X_URL = "https://x.com/cupbracketPF";
+
+/** X (formerly Twitter) logo. */
+function XIcon({ size = 15 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  );
+}
 
 function TabButton({
   active,
@@ -36,29 +49,87 @@ function TabButton({
   );
 }
 
+/** Connected-wallet button with a disconnect dropdown. */
+function WalletMenu() {
+  const { publicKey, disconnect } = useWallet();
+  const [open, setOpen] = useState(false);
+  const address = publicKey?.toBase58() ?? "";
+
+  return (
+    <div className="relative">
+      <Button variant="outline" onClick={() => setOpen((o) => !o)} title="Wallet">
+        <Wallet size={16} />
+        {shortAddr(address)}
+      </Button>
+      {open && (
+        <>
+          <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} aria-hidden />
+          <div className="absolute right-0 top-full z-50 mt-2 w-56 rounded-xl border border-border bg-panel p-2 shadow-2xl">
+            <div className="px-2 py-1 text-[11px] uppercase tracking-wide text-muted">
+              Connected wallet
+            </div>
+            <button
+              onClick={() => {
+                navigator.clipboard?.writeText(address);
+                toast.success("Address copied");
+                setOpen(false);
+              }}
+              className="flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left font-mono text-xs text-fg transition-colors hover:bg-panel-2"
+            >
+              <Copy size={13} className="shrink-0 text-muted" />
+              <span className="truncate">{address}</span>
+            </button>
+            <button
+              onClick={() => {
+                disconnect().catch(() => undefined);
+                setOpen(false);
+              }}
+              className="mt-1 flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-sm font-semibold text-red transition-colors hover:bg-red/10"
+            >
+              <LogOut size={14} /> Disconnect
+            </button>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 export function Header({
   activeTab,
   onTabChange,
+  onLogoClick,
 }: {
   activeTab: Tab;
   onTabChange: (t: Tab) => void;
+  onLogoClick: () => void;
 }) {
-  const { publicKey, connected, disconnect, connecting } = useWallet();
+  const { connected, connecting } = useWallet();
   const connectPhantom = usePhantomConnect();
-
-  const address = publicKey?.toBase58();
 
   return (
     <header className="sticky top-0 z-30 border-b border-border/70 bg-bg/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-[1600px] items-center justify-between gap-4 px-4 sm:px-6">
-        {/* Logo */}
-        <div className="flex items-center">
-          <img
-            src={logoUrl}
-            alt="Cup Predict"
-            className="h-10 w-auto select-none sm:h-12"
-            draggable={false}
-          />
+        {/* Logo (opens landing) + X link */}
+        <div className="flex items-center gap-2">
+          <button onClick={onLogoClick} className="flex items-center" title="About Cup Bracket">
+            <img
+              src={logoUrl}
+              alt="Cup Bracket"
+              className="h-10 w-auto select-none sm:h-12"
+              draggable={false}
+            />
+          </button>
+          <a
+            href={X_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="grid h-8 w-8 place-items-center rounded-lg border border-border text-muted transition-colors hover:border-cyan/60 hover:text-fg"
+            title="Follow on X"
+            aria-label="X (Twitter)"
+          >
+            <XIcon />
+          </a>
         </div>
 
         {/* Tabs */}
@@ -79,11 +150,8 @@ export function Header({
 
         {/* Wallet */}
         <div className="flex items-center gap-2 sm:gap-3">
-          {connected && address ? (
-            <Button variant="outline" onClick={() => disconnect()} title="Disconnect">
-              <Wallet size={16} />
-              {shortAddr(address)}
-            </Button>
+          {connected ? (
+            <WalletMenu />
           ) : (
             <Button variant="primary" onClick={connectPhantom} disabled={connecting}>
               <Wallet size={16} />
