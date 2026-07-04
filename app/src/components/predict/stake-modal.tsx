@@ -69,7 +69,7 @@ export function StakeModal({ open, onClose }: { open: boolean; onClose: () => vo
   const { publicKey, connected, sendTransaction } = useWallet();
   const { connection } = useConnection();
   const connectPhantom = usePhantomConnect();
-  const { championId, picks, poolSol, recordPrediction, refreshPool } = usePredictions();
+  const { championId, picks, poolSol, recordPrediction, refreshPool, reset } = usePredictions();
 
   const [amount, setAmount] = useState<number>(MIN_STAKE_SOL);
   const [step, setStep] = useState<Step>("review");
@@ -112,6 +112,7 @@ export function StakeModal({ open, onClose }: { open: boolean; onClose: () => vo
       bracketHash: d.bracketHash,
     });
     void refreshPool();
+    reset(); // clear the bracket so the user can immediately make a new one
     setStep("success");
   }
 
